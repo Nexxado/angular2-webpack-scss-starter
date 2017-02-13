@@ -3,8 +3,12 @@
  */
 import { Component } from '@angular/core';
 
+require('../sass/styles.scss');
+
 @Component({
     selector: 'app-root',
-    template: '<b>Bootstrapping an Angular Application</b>'
+    template: '<b class="test">Bootstrapping an Angular Application</b>',
+    // styles: [ require('./app.component.scss') ],
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent { }
