@@ -1,0 +1,33 @@
+{
+  "name": "status-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.0.4-rc.2",
+    "codelyzer": "^2.0.0",
+    "html-webpack-plugin": "^2.28.0",
+    "tslint": "^4.4.2",
+    "tslint-loader": "^3.4.2",
+    "typescript": "^2.1.6",
+    "typings": "^2.1.0",
+    "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "@angular/common": "^2.4.7",
+    "@angular/compiler": "^2.4.7",
+    "@angular/core": "^2.4.7",
+    "@angular/http": "^2.4.7",
+    "@angular/platform-browser": "^2.4.7",
+    "@angular/platform-browser-dynamic": "^2.4.7",
+    "@angular/router": "^3.4.7",
+    "core-js": "^2.4.1",
+    "rxjs": "^5.1.1",
+    "zone.js": "^0.7.6"
+  }
+}
