@@ -22,10 +22,21 @@ module.exports = {
                 ]
             }, {
                 test: /\.html$/,
-                loader: 'html-loader'
+                loader: 'html-loader',
+                query: {
+                    ignoreCustomFragments: [/\{\{.*?}}/],
+                    root: helpers.root('src'),
+                    attrs: ['img:src', 'img:ng-src']
+                }
+           }, {
+                test: /\.(png|jpe?g|gif|svg)$/i,
+                use: [
+                    'file-loader?hash=sha512&digest=hex&name=images/[name].[hash].[ext]',
+                    'image-webpack-loader'
+                ]
             }, {
-                test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-                loader: 'file-loader?name=assets/[name].[hash].[ext]'
+                test: /\.(eot|otf|ttf|woff|woff2)$/i,
+                loader: 'file-loader?hash=sha512&digest=hex&name=fonts/[name].[hash].[ext]'
             }, {
                 test: /\.scss$/,
                 exclude: [helpers.root('src', 'app')],
@@ -35,7 +46,7 @@ module.exports = {
                             loader: 'css-loader',
                             query: {
                                 modules: false,
-                                sourceMaps: true
+                                sourceMap: true
                             }
                         },
                         {
@@ -44,7 +55,7 @@ module.exports = {
                         {
                             loader: 'sass-loader',
                             query: {
-                                sourceMaps: true
+                                sourceMap: true
                             }
                         }
                     ]
@@ -59,7 +70,7 @@ module.exports = {
                     {
                         loader: 'sass-loader',
                         query: {
-                            sourceMaps: true
+                            sourceMap: true
                         }
                     },
                     {
@@ -80,7 +91,7 @@ module.exports = {
         ),
 
         new webpack.optimize.CommonsChunkPlugin({
-            name: ['app', 'vendor', 'polyfills'],
+            name: ['vendor', 'polyfills', 'manifest'],
             minChunks: Infinity
         }),
 
