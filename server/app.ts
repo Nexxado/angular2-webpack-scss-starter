@@ -6,8 +6,12 @@ import * as helmet from 'helmet';
 import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 
+// Import routers
+import { exampleRouter } from './routes/example';
+
 const app: express.Application = express();
 
+// App configuration
 app.use(logger('dev'));
 app.use(helmet());
 app.use(cookieParser());
@@ -15,7 +19,11 @@ app.use(json());
 app.use(compression());
 app.use(urlencoded({ extended: true }));
 
+// Static Routes
 app.use(express.static(path.resolve(__dirname, '../client')));
+
+// Routes
+app.use('/example', exampleRouter);
 
 // catch 404 and forward to error handler
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
