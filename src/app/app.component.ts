@@ -7,8 +7,7 @@ require('../sass/styles.scss');
 
 @Component({
     selector: 'app-root',
-    template: '<b class="test">Bootstrapping an Angular Application</b>',
-    // styles: [ require('./app.component.scss') ],
+    templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent { }

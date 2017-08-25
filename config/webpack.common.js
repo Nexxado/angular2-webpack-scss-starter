@@ -1,7 +1,10 @@
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var helpers = require('./helpers');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const helpers = require('./helpers');
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
+const WebpackChunkHash = require("webpack-chunk-hash");
 
 module.exports = {
     entry: {
@@ -11,70 +14,74 @@ module.exports = {
     },
     module: {
         rules: [{
-                test: /\.ts$/,
-                loaders: [{
-                        loader: 'awesome-typescript-loader',
-                        options: {
-                            configFileName: helpers.root('src', 'tsconfig.json')
-                        }
-                    },
-                    'angular2-template-loader'
-                ]
-            }, {
-                test: /\.html$/,
-                loader: 'html-loader',
-                query: {
-                    ignoreCustomFragments: [/\{\{.*?}}/],
-                    root: helpers.root('src'),
-                    attrs: ['img:src', 'img:ng-src']
+            test: /\.ts$/,
+            loaders: [{
+                loader: 'awesome-typescript-loader',
+                options: {
+                    configFileName: helpers.root('src', 'tsconfig.json')
                 }
-           }, {
-                test: /\.(png|jpe?g|gif|svg)$/i,
-                use: [
-                    'file-loader?hash=sha512&digest=hex&name=images/[name].[hash].[ext]',
-                    'image-webpack-loader'
-                ]
-            }, {
-                test: /\.(eot|otf|ttf|woff|woff2)$/i,
-                loader: 'file-loader?hash=sha512&digest=hex&name=fonts/[name].[hash].[ext]'
-            }, {
-                test: /\.scss$/,
-                exclude: [helpers.root('src', 'app')],
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [{
-                            loader: 'css-loader',
-                            query: {
-                                modules: false,
-                                sourceMap: true
-                            }
-                        },
-                        {
-                            loader: 'postcss-loader'
-                        },
-                        {
-                            loader: 'sass-loader',
-                            query: {
-                                sourceMap: true
-                            }
-                        }
-                    ]
-                })
             },
+                'angular2-template-loader'
+            ]
+        }, {
+            test: /\.html$/,
+            loader: 'html-loader',
+            query: {
+                ignoreCustomFragments: [/\{\{.*?}}/],
+                root: helpers.root('src'),
+                attrs: ['img:src', 'img:ng-src']
+            }
+        }, {
+            test: /\.(png|jpe?g|gif|svg)$/i,
+            loaders: [
+                'file-loader?hash=sha512&digest=hex&name=images/[name].[hash].[ext]',
+                'image-webpack-loader'
+            ]
+        }, {
+            test: /\.(eot|otf|ttf|woff|woff2)$/i,
+            loader: 'file-loader?hash=sha512&digest=hex&name=fonts/[name].[hash].[ext]'
+        }, {
+            test: /\.scss$/,
+            exclude: [helpers.root('src', 'app')],
+            loader: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: [
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true,
+                            importLoaders: true
+                        }
+                    }, {
+                        loader: 'postcss-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }, {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }
+                ]
+            })
+        },
             {
                 test: /\.scss$/,
                 include: [helpers.root('src', 'app')],
-                use: [{
-                        loader: 'raw-loader'
-                    },
+                loaders: [
                     {
-                        loader: 'sass-loader',
-                        query: {
+                        loader: 'raw-loader'
+                    }, {
+                        loader: 'postcss-loader',
+                        options: {
                             sourceMap: true
                         }
-                    },
-                    {
-                        loader: 'postcss-loader'
+                    }, {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true
+                        }
                     }
                 ]
             }
@@ -84,23 +91,34 @@ module.exports = {
     plugins: [
         // Workaround for angular/angular#11580
         new webpack.ContextReplacementPlugin(
-            // The (\\|\/) piece accounts for path separators in *nix and Windows
-            /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+            /angular(\\|\/)core(\\|\/)@angular/, // The (\\|\/) piece accounts for path separators in *nix and Windows
             helpers.root('./src'), // location of your src
-            {} // a map of your routes
+            {} // your Angular Async Route paths relative to this root directory
         ),
-
         new webpack.optimize.CommonsChunkPlugin({
             name: ['vendor', 'polyfills', 'manifest'],
             minChunks: Infinity
         }),
-
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        new webpack.HashedModuleIdsPlugin(),
+        new WebpackChunkHash(),
+        new InlineManifestWebpackPlugin({
+            name: 'webpackManifest'
+        }),
         new HtmlWebpackPlugin({
-            template: 'src/index.html',
-            inject: 'body',
+            template: helpers.root('src', 'index.ejs'),
+            filename: helpers.root('dist', 'index.html'),
             minify: {
                 removeComments: true
             }
+        }),
+        new ScriptExtHtmlWebpackPlugin({
+            defer: [/app/, /vendor/, /polyfills/],
+            defaultAttribute: 'async'
+        }),
+        new ExtractTextPlugin({
+            filename: '[name].[contentHash].css',
+            allChunks: true
         })
     ],
     resolve: {
