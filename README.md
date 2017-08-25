@@ -1,4 +1,4 @@
-# Angular2-webpack-scss starter pack
-A simple Angular2 starter pack using Webpack and SCSS
+# Angular4-webpack-scss starter pack
+A simple Angular4 starter pack using Webpack and SCSS
 
-* Updated to use Angular 4.
+* Updated to use Angular 4.3.6.

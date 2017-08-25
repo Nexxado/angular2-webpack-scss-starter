@@ -4,7 +4,8 @@
   "description": "Angular2 Starter pack using Webpack and SCSS",
   "main": "index.js",
   "scripts": {
-    "start": "rimraf dist && webpack-dev-server --open --inline --progress --port 8080",
+    "start": "webpack-dev-server --config ./config/webpack.dev.js --open --inline --progress --port 8080",
+    "start-prod": "webpack-dev-server --config ./config/webpack.prod.js --open --inline --progress --port 8080",
     "package-dev": "rimraf dist && webpack --config ./config/webpack.dev.js --progress",
     "package-prod": "rimraf dist && webpack --config ./config/webpack.prod.js --progress",
     "test": "echo \"Error: no test specified\" && exit 1"
