@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/StatusServer.iml" filepath="$PROJECT_DIR$/.idea/StatusServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/angular4-webpack-scss-starter.iml" filepath="$PROJECT_DIR$/.idea/angular4-webpack-scss-starter.iml" />
     </modules>
   </component>
 </project>
