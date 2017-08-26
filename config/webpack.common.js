@@ -4,7 +4,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const helpers = require('./helpers');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
-const WebpackChunkHash = require("webpack-chunk-hash");
 
 module.exports = {
     entry: {
@@ -101,7 +100,6 @@ module.exports = {
         }),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.HashedModuleIdsPlugin(),
-        new WebpackChunkHash(),
         new InlineManifestWebpackPlugin({
             name: 'webpackManifest'
         }),
