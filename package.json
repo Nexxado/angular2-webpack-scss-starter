@@ -1,6 +1,6 @@
 {
   "name": "angular2-webpack-scss-starter",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Angular2 Starter pack using Webpack and SCSS",
   "main": "index.js",
   "scripts": {
